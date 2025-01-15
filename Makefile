@@ -15,17 +15,19 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address -g3
 RM = rm -f
 
-SRCS = main.c
+SRCS = main.c libft/ft_strlen.c map_handler.c
 OBJS = $(SRCS:.c=.o)
 
 MLX_DIR = ./mlx
 MLX_LIB = $(MLX_DIR)/libmlx.a
 
+
+
 # Detect OS
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
-	INCLUDES = -I/usr/include -Imlx
-	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
+	INCLUDES = -I$(MLX_DIR)
+	MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11
 else ifeq ($(UNAME), Darwin)
 	INCLUDES = -I/opt/X11/include -Imlx
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/X11/lib -lXext -lX11 -framework OpenGL -framework AppKit
