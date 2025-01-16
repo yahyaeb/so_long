@@ -4,7 +4,7 @@
 #if defined(__APPLE__)
 #include "mlx/mlx.h"
 #else
-#include "minilibx-linux/mlx.h"
+#include "mlx/mlx.h"
 #endif
 
 #if defined(__APPLE__)
@@ -40,4 +40,7 @@ int check_row_walls(char *row);
 int has_surrounding_walls(char **map);
 int has_required_elements(char **map);
 int validate_map(char **map);
+int close_window_x(void *mlx_ptr);
+int close_window_esc(int keycode, void *param);
+void close_and_free(void *mlx_ptr);
 /*-----------------------------------------------*/

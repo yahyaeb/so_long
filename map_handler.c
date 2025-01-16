@@ -99,8 +99,8 @@ int has_required_elements(char **map)
   }
     if (player_count != 1)
         return (printf("Error: There must be exactly 1 player (P)\n"), 0);
-    if (exit_count < 1)
-        return (printf("Error: There must be at least 1 exit (E)\n"), 0);
+    if (exit_count != 1)
+        return (printf("Error: There must be exactly 1 exit (E)\n"), 0);
     if (collectible_count < 1)
         return (printf("Error: There must be at least 1 collectible (C)\n"), 0);
 
