@@ -15,13 +15,17 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address -g3
 RM = rm -f
 
-SRCS = main.c libft/ft_strlen.c map_handler.c
+SRCS = main.c \
+		map_handler.c \
+		src/map/parse_map.c \
+       	GNL/get_next_line.c \
+      	GNL/get_next_line_utils.c
 OBJS = $(SRCS:.c=.o)
 
 MLX_DIR = ./mlx
 MLX_LIB = $(MLX_DIR)/libmlx.a
 
-
+NCLUDES = -I./includes -I./GNL
 
 # Detect OS
 UNAME := $(shell uname)

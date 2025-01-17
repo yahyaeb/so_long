@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "./GNL/get_next_line.h"
 #if defined(__APPLE__)
 #include "mlx/mlx.h"
 #else
@@ -14,6 +14,15 @@
 #endif
 
 #include "mlx/mlx.h"
+
+typedef struct s_textures
+{
+    void *wall;
+    void *floor;
+    void *player;
+    void *collectible;
+    void *exit;
+} t_textures;
 
 typedef struct s_map
 {
@@ -44,3 +53,5 @@ int close_window_x(void *mlx_ptr);
 int close_window_esc(int keycode, void *param);
 void close_and_free(void *mlx_ptr);
 /*-----------------------------------------------*/
+
+char	*get_next_line(int fd);

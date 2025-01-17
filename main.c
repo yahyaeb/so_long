@@ -1,5 +1,44 @@
 #include "so_long.h"
 
+#include <fcntl.h> // For open()
+#include <stdlib.h> // For malloc() and free()
+#include <stdio.h>  // For perror()
+
+char **parse_map(const char *file_path)
+{
+    int fd = open(file_path, O_RDONLY);
+    if (fd < 0)
+    {
+        perror("Error opening map file");
+        return (NULL);
+    }
+
+    char **map = NULL;
+    char *line;
+    int i = 0;
+    while ((line = get_next_line(fd))) // Use your GNL implementation
+    {
+        map = realloc(map, sizeof(char *) * (i + 2)); // Allocate memory for a new line
+        if (!map)
+        {
+            perror("Error: Memory allocation failed");
+            return (NULL);
+        }
+        map[i++] = line; // Store the line in the array
+    }
+
+    if (map)
+        map[i] = NULL; // Null-terminate the array
+    close(fd);
+	
+    return (map);
+}
+void print_map(char **map)
+{
+    for (int i = 0; map[i]; i++)
+        printf("%s", map[i]); // Each line already ends with '\n' from GNL
+}
+
 int close_window_x(void *mlx_ptr)
 {
 	close_and_free(mlx_ptr);
@@ -52,6 +91,23 @@ int main(void)
 	}
 	mlx_put_image_to_window(mlx_ptr, win_ptr, bg_img, 0, 0);
 	/**************************/
+
+/*-------map parsing---------*/
+    char **map = parse_map("map.ber");
+    if (!map)
+        return (1);
+
+    // Print the map for debugging
+    if (validate_map(map))
+        print_map(map);
+    else {
+        for (int i = 0; map[i]; i++)
+            free(map[i]);
+        free(map);
+    }
+/*--------------------------*/
+
+
 	mlx_hook(win_ptr, 17, 0L, close_window_x, NULL);  // Exit when "X" button is clicked
 	mlx_hook(win_ptr, 2, 1L << 0, close_window_esc, NULL);
 	mlx_loop(mlx_ptr);
