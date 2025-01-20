@@ -33,6 +33,34 @@ char **parse_map(const char *file_path)
 	
     return (map);
 }
+
+
+
+void render_map(t_game *game, int tile_size)
+{
+    for (int y = 0; game->map[y]; y++) // Loop through rows
+    {
+        for (int x = 0; game->map[y][x]; x++) // Loop through columns
+        {
+            void *img = NULL;
+			printf("here is y: %d and here is x: %d \n", y, x);
+            if (game->map[y][x] == '1') // Cone (wall)
+                img = game->wall_img;
+            else if (game->map[y][x] == '0') // Road
+                img = game->empty_img;
+			else if (game->map[y][x] == 'C')
+				img = game->collectible_img;
+			else if (game->map[y][x] == 'P')
+				img = game->player_img;
+			else if (game->map[y][x] == 'C')
+				img = game->exit_img;
+
+            if (img)
+                mlx_put_image_to_window(game->mlx, game->win, img, x * tile_size, y * tile_size);
+        }
+    }
+}
+
 void print_map(char **map)
 {
     for (int i = 0; map[i]; i++)
@@ -62,58 +90,80 @@ void close_and_free(void *mlx_ptr)
 // {
 
 // }
+void load_assets(t_game *game)
+{
+    int img_width;
+    int img_height;
+
+    game->empty_img = mlx_xpm_file_to_image(game->mlx, "./assets/road_128x128.xpm", &img_width, &img_height);
+    game->wall_img = mlx_xpm_file_to_image(game->mlx, "./assets/cone_128x128.xpm", &img_width, &img_height);
+	game->collectible_img = mlx_xpm_file_to_image(game->mlx, "./assets/fuel_128x128.xpm", &img_width, &img_height);
+    game->player_img = mlx_xpm_file_to_image(game->mlx, "./assets/Player_128x128.xpm", &img_width, &img_height);
+	game->exit_img = mlx_xpm_file_to_image(game->mlx, "./assets/door_128x128.xpm", &img_width, &img_height);
+	
+	if (!game->empty_img || !game->wall_img || !game->collectible_img || !game->player_img || !game->exit_img)
+    {
+        perror("Error: Failed to load assets");
+        exit(1); // Handle the error appropriately
+    }
+}
+
+
+
 
 int main(void)
 {
-	void *mlx_ptr;
-	void *win_ptr;
-	
+    t_game game;
 
-	mlx_ptr = mlx_init();
-	if (!mlx_ptr)
-		return (1);
-	win_ptr = mlx_new_window(mlx_ptr, 1000, 500, "hi :)");
-	if (!win_ptr)
-		return (free(mlx_ptr), 1);
-
-	/******** Image ptr********/
-	void *bg_img;
-	int bg_height;
-	int bg_width;
-
-
-	bg_img = mlx_xpm_file_to_image(mlx_ptr, "assets/game_background.xpm", &bg_width, &bg_height);
-	if(!bg_img)
-	{
-		perror("Error: Failed to load image\n");
-		close_and_free(mlx_ptr);
-		return (1);
-	}
-	mlx_put_image_to_window(mlx_ptr, win_ptr, bg_img, 0, 0);
-	/**************************/
-
-/*-------map parsing---------*/
-    char **map = parse_map("map.ber");
-    if (!map)
+    // Initialize MiniLibX
+    game.mlx = mlx_init();
+    if (!game.mlx)
+    {
+        perror("Error: Failed to initialize MiniLibX");
         return (1);
-
-    // Print the map for debugging
-    if (validate_map(map))
-        print_map(map);
-    else {
-        for (int i = 0; map[i]; i++)
-            free(map[i]);
-        free(map);
     }
-/*--------------------------*/
+game.map = parse_map("map.ber");
+int window_width = strlen(game.map[0]) * TILE_SIZE;
+int window_height = get_map_height(game.map) * TILE_SIZE;
+    // Create the game window
+    game.win = mlx_new_window(game.mlx, window_width, window_height, "Infinite Runner");
+    if (!game.win)
+    {
+        perror("Error: Failed to create window");
+        return (free(game.mlx), 1);
+    }
 
+    // Load assets
+    load_assets(&game);
 
-	mlx_hook(win_ptr, 17, 0L, close_window_x, NULL);  // Exit when "X" button is clicked
-	mlx_hook(win_ptr, 2, 1L << 0, close_window_esc, NULL);
-	mlx_loop(mlx_ptr);
-	
-	mlx_destroy_image(mlx_ptr, bg_img);
-	close_and_free(mlx_ptr);
+    // Parse the map
+    game.map = parse_map("map.ber");
+    if (!game.map)
+    {
+        perror("Error: Failed to load map");
+        return (mlx_destroy_window(game.mlx, game.win), free(game.mlx), 1);
+    }
+    // Validate map
+    if (!validate_map(game.map))
+    {
+        perror("Error: Invalid map");
+        free(game.map); // Free allocated map memory
+        return (mlx_destroy_window(game.mlx, game.win), free(game.mlx), 1);
+    }
 
-	return (0);
+    // Render initial map and setup hooks
+    render_map(&game, TILE_SIZE);
+
+    mlx_hook(game.win, 17, 0L, close_window_x, &game);    // Handle "X" button click
+    mlx_hook(game.win, 2, 1L << 0, close_window_esc, &game); // Handle ESC key
+
+    // Event loop
+    mlx_loop(game.mlx);
+
+    // Cleanup on exit
+    free(game.map);
+    mlx_destroy_window(game.mlx, game.win);
+    free(game.mlx);
+
+    return (0);
 }

@@ -7,6 +7,7 @@
 #include "mlx/mlx.h"
 #endif
 
+#define TILE_SIZE 128 
 #if defined(__APPLE__)
 #define KEY_ESC 53  // macOS ESC keycode
 #else
@@ -24,6 +25,16 @@ typedef struct s_textures
     void *exit;
 } t_textures;
 
+typedef struct s_game {
+    void *mlx;
+    void *win;
+    void *wall_img;
+    void *empty_img;
+    void *player_img;
+    void *collectible_img;
+    void *exit_img;
+    char **map;
+} t_game;
 typedef struct s_map
 {
     int width;
@@ -55,3 +66,6 @@ void close_and_free(void *mlx_ptr);
 /*-----------------------------------------------*/
 
 char	*get_next_line(int fd);
+void load_assets(t_game *game);
+void render_map(t_game *game, int tile_size);
+void check_image_size(void *mlx,  char *path);

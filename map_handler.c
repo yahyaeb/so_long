@@ -9,6 +9,7 @@ int get_map_height(char **map)
     return height;
 }
 
+
 // Check if the map is rectangular
 int is_rectangular(char **map)
 {
