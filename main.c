@@ -52,8 +52,9 @@ void render_map(t_game *game, int tile_size)
 				img = game->collectible_img;
 			else if (game->map[y][x] == 'P')
 				img = game->player_img;
-			else if (game->map[y][x] == 'C')
+			else if (game->map[y][x] == 'E')
 				img = game->exit_img;
+				
 
             if (img)
                 mlx_put_image_to_window(game->mlx, game->win, img, x * tile_size, y * tile_size);
@@ -110,7 +111,6 @@ void load_assets(t_game *game)
 
 
 
-
 int main(void)
 {
     t_game game;
@@ -122,46 +122,77 @@ int main(void)
         perror("Error: Failed to initialize MiniLibX");
         return (1);
     }
-game.map = parse_map("map.ber");
-int window_width = strlen(game.map[0]) * TILE_SIZE;
-int window_height = get_map_height(game.map) * TILE_SIZE;
-    // Create the game window
-    game.win = mlx_new_window(game.mlx, window_width, window_height, "Infinite Runner");
-    if (!game.win)
-    {
-        perror("Error: Failed to create window");
-        return (free(game.mlx), 1);
-    }
-
-    // Load assets
-    load_assets(&game);
 
     // Parse the map
     game.map = parse_map("map.ber");
     if (!game.map)
     {
-        perror("Error: Failed to load map");
-        return (mlx_destroy_window(game.mlx, game.win), free(game.mlx), 1);
+        perror("Error: Failed to parse map");
+        return (1);
     }
+
+    // Calculate window dimensions based on the map and tile size
+    int window_width = strlen(game.map[0]) * TILE_SIZE;
+    int window_height = get_map_height(game.map) * TILE_SIZE;
+
+    // Create the game window
+    game.win = mlx_new_window(game.mlx, window_width, window_height, "Infinite Runner");
+    if (!game.win)
+    {
+        perror("Error: Failed to create window");
+        free(game.map); // Free map memory if window creation fails
+        return (free(game.mlx), 1);
+    }
+
+    // Load background image
+    int bg_width, bg_height;
+    game.bg = mlx_xpm_file_to_image(game.mlx, "assets/game_background.xpm", &bg_width, &bg_height);
+    if (!game.bg)
+    {
+        perror("Error: Failed to load background image");
+        free(game.map);
+        mlx_destroy_window(game.mlx, game.win);
+        free(game.mlx);
+        return (1);
+    }
+
+    // Warn if background image dimensions don't match window size
+    if (bg_width != window_width || bg_height != window_height)
+    {
+        printf("Warning: Background image dimensions (%dx%d) do not match window size (%dx%d)\n",
+               bg_width, bg_height, window_width, window_height);
+    }
+
+    // Load game assets
+    load_assets(&game);
+
     // Validate map
     if (!validate_map(game.map))
     {
         perror("Error: Invalid map");
-        free(game.map); // Free allocated map memory
-        return (mlx_destroy_window(game.mlx, game.win), free(game.mlx), 1);
+        free(game.map);
+        mlx_destroy_image(game.mlx, game.bg); // Free background image
+        mlx_destroy_window(game.mlx, game.win);
+        free(game.mlx);
+        return (1);
     }
 
-    // Render initial map and setup hooks
+    // Render the background first
+    mlx_put_image_to_window(game.mlx, game.win, game.bg, 0, 0);
+
+    // Render the map on top of the background
     render_map(&game, TILE_SIZE);
 
+    // Set up event hooks
     mlx_hook(game.win, 17, 0L, close_window_x, &game);    // Handle "X" button click
     mlx_hook(game.win, 2, 1L << 0, close_window_esc, &game); // Handle ESC key
 
-    // Event loop
+    // Start the event loop
     mlx_loop(game.mlx);
 
     // Cleanup on exit
     free(game.map);
+    mlx_destroy_image(game.mlx, game.bg);
     mlx_destroy_window(game.mlx, game.win);
     free(game.mlx);
 

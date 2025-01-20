@@ -34,6 +34,7 @@ typedef struct s_game {
     void *collectible_img;
     void *exit_img;
     char **map;
+	void *bg;
 } t_game;
 typedef struct s_map
 {
