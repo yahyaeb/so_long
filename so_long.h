@@ -56,6 +56,10 @@ typedef struct s_game
     int          player_x;
     int          player_y;
 
+    //Exit location
+    int         exit_x;
+    int         exit_y;
+
     // Tile size
     int          tile_size;
 
@@ -64,6 +68,7 @@ typedef struct s_game
 
     // Game state
     int          collectibles_count;
+    int total_collectibles;
     int          steps;
 } t_game;
 

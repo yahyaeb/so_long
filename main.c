@@ -36,16 +36,12 @@ char **parse_map(const char *file_path)
 }
 void render_map(t_game *game, int tile_size)
 {
-    int y;
-    int x;
-
-    y = 0;
+    int y = 0;
     while (game->map[y])
     {
-        x = 0;
+        int x = 0;
         while (game->map[y][x])
         {
-
             mlx_put_image_to_window(game->mlx, game->win, game->textures.floor, x * tile_size, y * tile_size);
 
             if (game->map[y][x] == '1') // Wall
@@ -54,16 +50,24 @@ void render_map(t_game *game, int tile_size)
                 mlx_put_image_to_window(game->mlx, game->win, game->textures.collectible, x * tile_size, y * tile_size);
             else if (game->map[y][x] == 'P') // Player
                 mlx_put_image_to_window(game->mlx, game->win, game->textures.player, x * tile_size, y * tile_size);
-            else if (game->map[y][x] == 'E' && game->collectibles_count == 0) 
-                mlx_put_image_to_window(game->mlx, game->win, game->textures.exit, x * tile_size, y * tile_size);
+
             x++;
         }
         y++;
     }
+
+    // Always render the exit if all collectibles are collected
+    if (game->collectibles_count == 0)
+    {
+        mlx_put_image_to_window(
+            game->mlx,
+            game->win,
+            game->textures.exit,
+            game->exit_x * tile_size,
+            game->exit_y * tile_size
+        );
+    }
 }
-
-
-
 
 int close_window_x(void *mlx_ptr)
 {
@@ -119,9 +123,14 @@ int    count_collectibles(char **map)
 
 void initialize_player_pos(t_game *game)
 {
-    for (int i = 0; game->map[i]; i++)
+    int i;
+    int k;
+
+    i = 0;
+    while(game->map[i])
     {
-        for (int k = 0; game->map[i][k]; k++)
+        k = 0;
+        while(game->map[i][k])
         {
             if (game->map[i][k] == 'P')
             {
@@ -129,7 +138,31 @@ void initialize_player_pos(t_game *game)
                 game->player_y = i;
                 return;
             }
+            k++;
         }
+        i++;
+    }
+}
+void initialize_exit_pos(t_game *game)
+{
+    int i;
+    int k;
+
+    i = 0;
+    while(game->map[i])
+    {
+        k = 0;
+        while(game->map[i][k])
+        {
+            if (game->map[i][k] == 'E')
+            {
+                game->player_x = k;
+                game->player_y = i;
+                return;
+            }
+            k++;
+        }
+        i++;
     }
 }
 int handle_keypress(int keycode, t_game *game)
@@ -167,28 +200,43 @@ int handle_keypress(int keycode, t_game *game)
     }
 
 
+printf("game->map letter: %c\n", game->map[new_y][new_x]);
 if (game->map[new_y][new_x] == 'E') 
 {
-    if (game->collectibles_count == 0)
+    printf("I am here 0");
+    if (new_x == game->exit_x && new_y == game->exit_y && game->collectibles_count == 0)
     {   
         printf("You win! Exiting...\n");
         cleanup_game(game);
         exit(0);
     }
     else
-        printf("Standing on the exit. Collectibles remaining: %d\n", game->collectibles_count);
+        printf("Collect all collectibles before exiting!\n");
 }
+
 
     game->map[game->player_y][game->player_x] = '0'; // Clear old position
     game->player_x = new_x;
     game->player_y = new_y;
 
     // If the player is standing on the door, keep it as 'E'
-    if (game->map[new_y][new_x] == 'E')
-        game->map[new_y][new_x] = 'E';
+    if (new_x == game->exit_x && new_y == game->exit_y && game->collectibles_count != 0)
+    {
+        printf("I am here 1\n");
+        game->map[new_y][new_x] = 'P';
+        printf("Player is on the exit!\n");
+    }
     else
-        game->map[new_y][new_x] = 'P'; // Mark new position as player
-
+    {
+        if (new_x == game->exit_x && new_y == game->exit_y && game->collectibles_count == 0)
+    {   
+        printf("You win! Exiting...\n");
+        cleanup_game(game);
+        exit(0);
+    }
+        printf("I am here 2\n");
+        game->map[new_y][new_x] = 'P'; // Update to player position
+    }
 
     mlx_clear_window(game->mlx, game->win);
     render_map(game, TILE_SIZE);
@@ -198,10 +246,14 @@ if (game->map[new_y][new_x] == 'E')
 
 void    cleanup_game(t_game *game)
 {
-    // Free each row of the map
-    for (int i = 0; game->map[i]; i++)
-        free(game->map[i]);
+    int i;
 
+    i = 0;
+    while(game->map[i])
+    {
+        free(game->map[i]);
+        i++;
+    }
     // Free the map array itself
     free(game->map);
 
@@ -256,6 +308,8 @@ int main(void)
         cleanup_game(&game);
         return (1);
     }
+game.total_collectibles = count_collectibles(game.map);
+game.collectibles_count = game.total_collectibles;
 
     // Load game assets
     load_assets(&game);
@@ -270,7 +324,8 @@ int main(void)
 
     // Initialize the player's position
     initialize_player_pos(&game);
-    
+    initialize_exit_pos(&game);
+
     // Render the map
     render_map(&game, TILE_SIZE);
 
