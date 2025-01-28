@@ -4,5 +4,6 @@
         "stdlib.h": "c",
         "so_long.h": "c",
         "format": "c"
-    }
+    },
+    "makefile.configureOnOpen": false
 }

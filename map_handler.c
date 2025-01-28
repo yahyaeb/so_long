@@ -21,8 +21,6 @@ int is_rectangular(char **map)
 
     while (map[i])
     {
-        printf("i: %d\n", i);
-        printf("strlen: %d, row_length: %d\n",ft_strlen(map[i]), row_length);
         if (ft_strlen(map[i]) != row_length)
             return (printf("Error: Map is not rectangular.\n"), 0);
         i++;

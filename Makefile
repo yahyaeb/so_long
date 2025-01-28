@@ -12,7 +12,7 @@
 
 NAME = so_long
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address -g3
+CFLAGS = -Wall -Werror -Wextra -g -g3 -fsanitize=address
 RM = rm -f
 
 SRCS = main.c \
