@@ -156,8 +156,8 @@ void initialize_exit_pos(t_game *game)
         {
             if (game->map[i][k] == 'E')
             {
-                game->player_x = k;
-                game->player_y = i;
+                game->exit_x = k;
+                game->exit_y = i;
                 return;
             }
             k++;
