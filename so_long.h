@@ -97,7 +97,7 @@ void check_image_size(void *mlx,  char *path);
 void cleanup_game(t_game *game);
 int    count_collectibles(char **game);
 void print_map(char**map);
-int	flood_fill(char **map, int x, int y, int *collectibles_count);
+int	flood_fill(char **map, int x, int y, int *collectibles_count, int total_collectibles, int *found_exit);
 char	**copy_map(char **map);
 void initialize_player_pos(t_game *game);
 void get_player_position(char **map, int *x, int *y);

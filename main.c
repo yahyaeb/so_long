@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:42:53 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/06 10:38:15 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/06 15:16:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,6 @@ int handle_keypress(int keycode, t_game *game)
     int new_x = game->player_x;
     int new_y = game->player_y;
 
-
     if (keycode == KEY_W)
         new_y -= 1;
     else if (keycode == KEY_S)
@@ -271,7 +270,7 @@ int handle_keypress(int keycode, t_game *game)
         cleanup_game(game);
         exit(0);
     }
-        printf("I am here 2\n");
+        printf("I am here buddy\n");
         game->map[new_y][new_x] = 'P'; // Update to player position
     }
 
