@@ -92,7 +92,8 @@ char	*ft_strdup(const char *str)
 {
 	char	*cpy;
 	int		len;
-
+	if(!str)
+		return NULL;
 	len = ft_strlen(str) + 1;
 	cpy = malloc((len) * sizeof(char));
 	if (!cpy)

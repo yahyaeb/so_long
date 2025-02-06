@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/02 06:42:53 by yel-bouk          #+#    #+#             */
+/*   Updated: 2025/02/06 10:38:15 by yel-bouk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
-
+//here
 
 char **parse_map(const char *file_path)
 {
@@ -8,19 +20,28 @@ char **parse_map(const char *file_path)
     if (fd < 0)
     {
         perror("Error opening map file");
-        close(fd);
         return (NULL);
     }
 
     char **map = NULL;
     char *line;
     int i = 0;
+
     while ((line = get_next_line(fd))) 
     {
+        if (line[0] == '\n' || line[0] == '\0') // Ignore empty lines
+        {
+            free(line);
+            continue;
+        }
         char **temp = realloc(map, sizeof(char *) * (i + 2));
         if (!temp)
         {
             perror("Error: Memory allocation failed");
+            while (i > 0)
+                free(map[--i]); // Free all previously allocated lines
+            free(map);
+            free(line);
             close(fd);
             return (NULL);
         }
@@ -33,6 +54,24 @@ char **parse_map(const char *file_path)
 
     close(fd);
     return (map);
+}
+
+
+
+
+void print_map(char**map)
+{
+    int i = 0;
+    while(map[i])
+    {
+        int j = 0;
+        while(map[i][j])
+        {
+            printf("%c ", map[i][j]);
+            j++;
+        }
+        i++;
+    }
 }
 void render_map(t_game *game, int tile_size)
 {
@@ -69,19 +108,14 @@ void render_map(t_game *game, int tile_size)
     }
 }
 
-int close_window_x(void *mlx_ptr)
+
+int close_window_x(void *param)
 {
-	cleanup_game(mlx_ptr);
-	exit(0);
+    t_game *game = (t_game *)param;
+    cleanup_game(game);
+    exit(0);
 }
 
-int close_window_esc(int keycode, void *param)
-{
-	(void)param;
-	if(keycode == KEY_ESC)
-		exit(0);
-	return (0);
-}
 
 void load_assets(t_game *game)
 {
@@ -94,7 +128,7 @@ void load_assets(t_game *game)
 	game->textures.exit = mlx_xpm_file_to_image(game->mlx, "./assets/door_bg.xpm", &img_width, &img_height);
     game->textures.floor = mlx_xpm_file_to_image(game->mlx, "./assets/background_green_tile.xpm", &img_width, &img_height);
 	
-	if (!game->textures.player || !game->textures.wall || !game->textures.exit || !game->textures.collectible)
+	if (!game->textures.player || !game->textures.wall || !game->textures.exit || !game->textures.collectible || !game->textures.floor)
     {
         perror("Error: Failed to load assets");
         exit(1);
@@ -143,11 +177,14 @@ void initialize_player_pos(t_game *game)
         i++;
     }
 }
+
 void initialize_exit_pos(t_game *game)
 {
     int i;
     int k;
-
+    
+    game->exit_x = -1;
+    game->exit_y = -1;
     i = 0;
     while(game->map[i])
     {
@@ -165,6 +202,7 @@ void initialize_exit_pos(t_game *game)
         i++;
     }
 }
+
 int handle_keypress(int keycode, t_game *game)
 {
     int new_x = game->player_x;
@@ -200,31 +238,30 @@ int handle_keypress(int keycode, t_game *game)
     }
 
 
-printf("game->map letter: %c\n", game->map[new_y][new_x]);
-if (game->map[new_y][new_x] == 'E') 
-{
-    printf("I am here 0");
-    if (new_x == game->exit_x && new_y == game->exit_y && game->collectibles_count == 0)
-    {   
-        printf("You win! Exiting...\n");
-        cleanup_game(game);
-        exit(0);
+// printf("game->map letter: %c\n", game->map[new_y][new_x]);
+    if (game->map[new_y][new_x] == 'E')
+    {
+        if (game->collectibles_count == 0)
+        {
+            printf("You win! Exiting...\n");
+            cleanup_game(game);
+            exit(0);
+        }
+        else
+        {
+            printf("Collect all collectibles before exiting!\n");
+        }
     }
-    else
-        printf("Collect all collectibles before exiting!\n");
-}
-
-
     game->map[game->player_y][game->player_x] = '0'; // Clear old position
     game->player_x = new_x;
     game->player_y = new_y;
 
     // If the player is standing on the door, keep it as 'E'
-    if (new_x == game->exit_x && new_y == game->exit_y && game->collectibles_count != 0)
+    if (game->map[new_y][new_x] == 'E' && game->collectibles_count == 0)
     {
-        printf("I am here 1\n");
-        game->map[new_y][new_x] = 'P';
-        printf("Player is on the exit!\n");
+        printf("You win! Exiting...\n");
+        cleanup_game(game);
+        exit(0);
     }
     else
     {
@@ -243,21 +280,39 @@ if (game->map[new_y][new_x] == 'E')
 
     return (0);
 }
-
-void    cleanup_game(t_game *game)
+void free_map(char **map)
 {
-    int i;
-
-    i = 0;
-    while(game->map[i])
+    int i = 0;
+    while (map && map[i])
     {
-        free(game->map[i]);
+        free(map[i]); // Free each row
         i++;
     }
-    // Free the map array itself
-    free(game->map);
+    free(map); // Free the map array itself
+}
 
-    // Free all textures if loaded
+void cleanup_game(t_game *game)
+{
+    int i = 0;
+
+    // Free the map copy
+    if (game->map_copy)
+    {
+        while (game->map_copy[i])
+            free(game->map_copy[i++]);
+        free(game->map_copy);
+    }
+
+    // Free the map
+    i = 0;
+    if (game->map)
+    {
+        while (game->map[i])
+            free(game->map[i++]);
+        free(game->map);
+    }
+    
+    // Free textures
     if (game->textures.floor)
         mlx_destroy_image(game->mlx, game->textures.floor);
     if (game->textures.wall)
@@ -272,12 +327,19 @@ void    cleanup_game(t_game *game)
     // Destroy the game window and MLX instance
     if (game->win)
         mlx_destroy_window(game->mlx, game->win);
+
     if (game->mlx)
+    {
+        mlx_destroy_display(game->mlx); // Important!
         free(game->mlx);
+    }
 }
+
+
 int main(void)
 {
     t_game game;
+    memset(&game, 0, sizeof(t_game));
 
     // Initialize MiniLibX
     game.mlx = mlx_init();
@@ -288,7 +350,7 @@ int main(void)
     }
 
     // Parse the map
-    game.map = parse_map("map.ber");
+    game.map = parse_map("map/map.ber");
     if (!game.map)
     {
         perror("Error: Failed to parse map");
@@ -296,8 +358,24 @@ int main(void)
         return (1);
     }
 
-    // Calculate window dimensions based on the map and tile size
-    int window_width = strlen(game.map[0]) * TILE_SIZE;
+    game.map_copy = copy_map(game.map);
+    if (!game.map_copy)
+    {
+        perror("Error: Failed to copy map");
+        cleanup_game(&game);
+        return (1);
+    }
+
+    // Validate the map BEFORE creating the window
+    if (!validate_map(game.map_copy))
+    {
+        perror("Error: Invalid map here");
+        cleanup_game(&game);
+        return (1);
+    }
+
+    // Calculate window dimensions
+    int window_width = (strlen(game.map[0]) - 1) * TILE_SIZE;
     int window_height = get_map_height(game.map) * TILE_SIZE;
 
     // Create the game window
@@ -308,19 +386,12 @@ int main(void)
         cleanup_game(&game);
         return (1);
     }
-game.total_collectibles = count_collectibles(game.map);
-game.collectibles_count = game.total_collectibles;
+
+    game.total_collectibles = count_collectibles(game.map);
+    game.collectibles_count = game.total_collectibles;
 
     // Load game assets
     load_assets(&game);
-
-    // Validate the map
-    if (!validate_map(game.map))
-    {
-        perror("Error: Invalid map");
-        cleanup_game(&game);
-        return (1);
-    }
 
     // Initialize the player's position
     initialize_player_pos(&game);
@@ -330,13 +401,12 @@ game.collectibles_count = game.total_collectibles;
     render_map(&game, TILE_SIZE);
 
     // Set up event hooks
-    mlx_hook(game.win, 17, 0L, close_window_x , &game);    // Handle "X" button click
-    mlx_hook(game.win, 2, 1L << 0, handle_keypress, &game); // Handle key presses
+    mlx_hook(game.win, 17, 0L, close_window_x, &game);
+    mlx_hook(game.win, 2, 1L << 0, handle_keypress, &game);
 
+    // Handle CTRL+C to prevent leaks
     // Start the event loop
     mlx_loop(game.mlx);
 
-    // Cleanup on exit
-    cleanup_game(&game);
-    return (0);
+    return (0); // No need for cleanup_game here
 }

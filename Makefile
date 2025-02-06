@@ -6,17 +6,17 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 15:13:25 by yel-bouk          #+#    #+#              #
-#    Updated: 2025/01/14 12:48:46 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/02/02 06:57:26 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -g3 -fsanitize=address
-RM = rm -f
+CFLAGS = -Wall -Werror -Wextra
 
 SRCS = main.c \
-		map_handler.c \
+		map/map_handler.c \
+		map/map_utils.c \
 		src/map/parse_map.c \
        	GNL/get_next_line.c \
       	GNL/get_next_line_utils.c
