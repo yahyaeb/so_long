@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 20:18:44 by yel-bouk          #+#    #+#             */
-/*   Updated: 2024/11/19 17:41:01 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/07 06:56:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strchr(const char *str, int c);
 char	*strjoin_and_free(char *s1, const char *s2);
 char	*extract_line(char *buffer);
 void	*ft_memmove(void *dest, const void *src, size_t n);
-int	ft_strlen(const char *str);
+int		ft_strlen(const char *str);
 char	*ft_strdup(const char *str);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*final_line(char **buffer);

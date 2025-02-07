@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 20:19:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2024/11/19 16:27:20 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/07 07:03:38 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,9 @@ char	*ft_strdup(const char *str)
 {
 	char	*cpy;
 	int		len;
-	if(!str)
-		return NULL;
+
+	if (!str)
+		return (NULL);
 	len = ft_strlen(str) + 1;
 	cpy = malloc((len) * sizeof(char));
 	if (!cpy)

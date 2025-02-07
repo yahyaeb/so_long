@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 15:13:25 by yel-bouk          #+#    #+#              #
-#    Updated: 2025/02/02 06:57:26 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/02/07 11:37:47 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,12 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra
 
 SRCS = main.c \
+		keys.c \
+		cleanup.c \
+		keys_utils.c \
 		map/map_handler.c \
 		map/map_utils.c \
+		map/map_parser.c \
 		src/map/parse_map.c \
        	GNL/get_next_line.c \
       	GNL/get_next_line_utils.c

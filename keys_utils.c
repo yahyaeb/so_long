@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   keys_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 13:17:13 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/07 06:52:35 by yel-bouk         ###   ########.fr       */
+/*   Created: 2025/02/07 11:37:18 by yel-bouk          #+#    #+#             */
+/*   Updated: 2025/02/07 11:38:34 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-//Calculates the length of a string (excluding null terminator)
-int	ft_strlen(const char *str)
-{
-	int	i;
+#include "so_long.h"
 
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	return (i);
+void	get_new_position(int keycode, int *new_x, int *new_y)
+{
+	if (keycode == KEY_W)
+		(*new_y) -= 1;
+	else if (keycode == KEY_S)
+		(*new_y) += 1;
+	else if (keycode == KEY_A)
+		(*new_x) -= 1;
+	else if (keycode == KEY_D)
+		(*new_x) += 1;
 }
