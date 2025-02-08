@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:51:27 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/07 11:37:34 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/08 09:17:47 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,9 @@ int		ft_strlen(const char *str);
 char **parse_map(const char *file_path);
 
 void	get_new_position(int keycode, int *new_x, int *new_y);
+int	open_file(const char *file_path);
+char	**allocate_map(int line_count);
+int	count_lines(const char *file_path);
+void	free_map_memory(char **map, int size);
+void	read_lines(int fd, char **map);
 #endif

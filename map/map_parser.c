@@ -6,83 +6,67 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 09:25:16 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/07 11:14:03 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/08 09:18:47 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-void render_map(t_game *game, int tile_size)
+void	render_objects(t_game *game, int x, int y, int tile_size)
 {
-    int y = 0;
-    while (game->map[y])
-    {
-        int x = 0;
-        while (game->map[y][x])
-        {
-            mlx_put_image_to_window(game->mlx, game->win, game->textures.floor, x * tile_size, y * tile_size);
-
-            if (game->map[y][x] == '1') // Wall
-                mlx_put_image_to_window(game->mlx, game->win, game->textures.wall, x * tile_size, y * tile_size);
-            else if (game->map[y][x] == 'C') // Collectible
-                mlx_put_image_to_window(game->mlx, game->win, game->textures.collectible, x * tile_size, y * tile_size);
-            else if (game->map[y][x] == 'P') // Player
-                mlx_put_image_to_window(game->mlx, game->win, game->textures.player, x * tile_size, y * tile_size);
-
-            x++;
-        }
-        y++;
-    }
-    if (game->collectibles_count == 0)
-    {
-        mlx_put_image_to_window(
-            game->mlx,
-            game->win,
-            game->textures.exit,
-            game->exit_x * tile_size,
-            game->exit_y * tile_size
-        );
-    }
+	if (game->map[y][x] == '1')
+		mlx_put_image_to_window(game->mlx, game->win,
+			game->textures.wall, x * tile_size, y * tile_size);
+	else if (game->map[y][x] == 'C')
+		mlx_put_image_to_window(game->mlx, game->win,
+			game->textures.collectible, x * tile_size, y * tile_size);
+	else if (game->map[y][x] == 'P')
+		mlx_put_image_to_window(game->mlx, game->win,
+			game->textures.player, x * tile_size, y * tile_size);
 }
 
-char **parse_map(const char *file_path)
+void	render_map(t_game *game, int tile_size)
 {
-    int fd = open(file_path, O_RDONLY);
-    if (fd < 0)
-    {
-        perror("Error opening map file");
-        return (NULL);
-    }
+	int	y;
+	int	x;
 
-    char **map = NULL;
-    char *line;
-    int i = 0;
+	y = 0;
+	while (game->map[y])
+	{
+		x = 0;
+		while (game->map[y][x])
+		{
+			mlx_put_image_to_window(game->mlx, game->win,
+				game->textures.floor, x * tile_size, y * tile_size);
+			render_objects(game, x, y, tile_size);
+			x++;
+		}
+		y++;
+	}
+	if (game->collectibles_count == 0)
+		mlx_put_image_to_window(game->mlx, game->win, game->textures.exit,
+			game->exit_x * tile_size, game->exit_y * tile_size);
+}
 
-    while ((line = get_next_line(fd))) 
-    {
-        if (line[0] == '\n' || line[0] == '\0')
-        {
-            free(line);
-            continue;
-        }
-        char **temp = realloc(map, sizeof(char *) * (i + 2));
-        if (!temp)
-        {
-            perror("Error: Memory allocation failed");
-            while (i > 0)
-                free(map[--i]);
-            free(map);
-            free(line);
-            close(fd);
-            return (NULL);
-        }
-        map = temp;
-        map[i++] = line;
-    }
+char	**parse_map(const char *file_path)
+{
+	int		fd;
+	int		line_count;
+	char	**map;
 
-    if (map)
-        map[i] = NULL;
-
-    close(fd);
-    return (map);
+	line_count = count_lines(file_path);
+	if (line_count < 0)
+		return (NULL);
+	map = allocate_map(line_count);
+	if (!map)
+		return (NULL);
+	fd = open_file(file_path);
+	if (fd < 0)
+	{
+		free(map);
+		return (NULL);
+	}
+	read_lines(fd, map);
+	close(fd);
+	return (map);
 }

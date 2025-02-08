@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 15:13:25 by yel-bouk          #+#    #+#              #
-#    Updated: 2025/02/07 11:37:47 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/02/08 09:27:26 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,8 @@ SRCS = main.c \
 		cleanup.c \
 		keys_utils.c \
 		map/map_handler.c \
+		map/map_parser_utils.c \
+		map/map_floodfill.c \
 		map/map_utils.c \
 		map/map_parser.c \
 		src/map/parse_map.c \
