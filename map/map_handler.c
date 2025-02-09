@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:54:31 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 13:11:05 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:45:54 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,12 @@ int	check_exceeding_counts(int *player_count, int *exit_count)
 {
 	if (*player_count > 1)
 	{
-		perror("Error: There must be exactly 1 player (P).\n");
+		printf("Error: There must be exactly 1 player (P).\n");
 		return (0);
 	}
 	if (*exit_count > 1)
 	{
-		perror("Error: There must be exactly 1 exit (E).\n");
+		printf("Error: There must be exactly 1 exit (E).\n");
 		return (0);
 	}
 	return (1);
@@ -113,7 +113,7 @@ int	validate_map_structure(char **map)
 	}
 	if (!has_surrounding_walls(map))
 	{
-		perror("Error: Map is not properly enclosed by walls.\n");
+		printf("Error: Map is not properly enclosed by walls.\n");
 		return (0);
 	}
 	if (!has_required_elements(map))
@@ -144,4 +144,3 @@ int	validate_map(char **map)
 	}
 	return (1);
 }
-

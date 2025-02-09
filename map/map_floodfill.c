@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 09:20:21 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 12:13:18 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:46:55 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,9 @@
 int	count_checker(int *player_count, int *exit_count, int *collectible_count)
 {
 	if (*player_count != 1)
-	{
-		perror("Error: There must be exactly 1 player (P).\n");
 		return (0);
-	}
 	if (*exit_count != 1)
-	{
-		perror("Error: There must be exactly 1 exit (E).\n");
 		return (0);
-	}
 	if (*collectible_count < 1)
 	{
 		perror("Error: There must be at least 1 collectible (C).\n");

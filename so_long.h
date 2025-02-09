@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:51:27 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 12:08:51 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:17:58 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int	open_file(const char *file_path);
 char	**allocate_map(int line_count);
 int	count_lines(const char *file_path);
 void	free_map_memory(char **map, int size);
+void	free_map(char **map);
 void	read_lines(int fd, char **map);
 void	init_game(t_game *game);
 void	load_map(t_game *game);

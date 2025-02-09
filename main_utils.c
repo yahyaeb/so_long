@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:48:49 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 13:10:57 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:40:16 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,26 +107,30 @@ void	free_map_load(char **map)
 	}
 	free(map); // ✅ Free the main array
 }
-
+void handle_map_error(t_game *game)
+{
+    if(game->map)
+		free_map(game->map);
+	if(game->map_copy)
+    	free_map(game->map_copy);
+    mlx_destroy_display(game->mlx);
+    free(game->mlx);
+    exit(1);
+}
 void	load_map(t_game *game)
 {
 	game->map = parse_map("map/map.ber");
 	if (!game->map)
 	{
-		perror("Error: Failed to parse map");
-		cleanup_game(game);
-		exit(1);
+		handle_map_error(game);
 	}
 	game->map_copy = copy_map(game->map);
 	if (!game->map_copy)
 	{
-		perror("Error: Failed to copy map");
-		cleanup_game(game);
-		exit(1);
+		handle_map_error(game);
 	}
 	if (!validate_map(game->map_copy))
 	{
-		cleanup_game(game);
-		exit(1);
+		handle_map_error(game);
 	}
 }
