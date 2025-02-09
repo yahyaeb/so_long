@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:54:48 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 16:53:46 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 16:56:00 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ int	check_top_bottom_walls(char *line)
 {
 	int	row_len;
 	int	i;
-	
+
 	i = 0;
 	if (!line)
 		return (0);
 	row_len = ft_strlen(line) - 1;
-	while(i < row_len)
+	while (i < row_len)
 	{
-		if(line[i] != '1')
-				return (0);
+		if (line[i] != '1')
+			return (0);
 		i++;
 	}
 	return (1);
@@ -91,7 +91,8 @@ int	has_surrounding_walls(char **map)
 	if (!map || !map[0])
 		return (printf("Error: Map is empty.\n"), 0);
 	height = get_map_height(map);
-	if (!check_top_bottom_walls(map[0]) || !check_top_bottom_walls(map[height - 1]))
+	if (!check_top_bottom_walls(map[0])
+		|| !check_top_bottom_walls(map[height - 1]))
 		return (0);
 	i = 0;
 	while (i < height)

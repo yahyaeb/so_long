@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:54:31 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 13:45:54 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:02:43 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ int	count_elements(char **map, int *player_count,
 	}
 	return (1);
 }
+
 int	has_invalid_char(char **map)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (map[i])
@@ -50,16 +51,18 @@ int	has_invalid_char(char **map)
 		while (map[i][j])
 		{
 			if (map[i][j] != 'P' && map[i][j] != 'E' &&
-				map[i][j] != 'C' && map[i][j] != '0' && map[i][j] != '1' && map[i][j] != '\n')
+				map[i][j] != 'C' && map[i][j] != '0' &&
+				map[i][j] != '1' && map[i][j] != '\n')
 			{
-				printf("Error: Invalid character '%c' found in map.\n", map[i][j]);
-				return (1); // Found an invalid character
+				printf("Error: Invalid character '%c'"
+					"found in map.\n", map[i][j]);
+				return (1);
 			}
 			j++;
 		}
 		i++;
 	}
-	return (0); // No invalid characters found
+	return (0);
 }
 
 int	has_required_elements(char **map)
@@ -108,8 +111,8 @@ int	validate_map_structure(char **map)
 		return (0);
 	if (has_invalid_char(map))
 	{
-		printf("invalid chars\n");	
-		return (0);	
+		printf("invalid chars\n");
+		return (0);
 	}
 	if (!has_surrounding_walls(map))
 	{
@@ -126,20 +129,20 @@ int	validate_map_structure(char **map)
 
 int	validate_map(char **map)
 {
-	int	px;
-	int	py;
-	t_flood flood;
+	int			px;
+	int			py;
+	t_flood		flood;
 
 	flood.collectibles_count = 0;
 	flood.found_exit = 0;
 	get_player_position(map, &px, &py);
-
 	if (!validate_map_structure(map))
 		return (0);
 	if (!flood_fill(map, px, py, &flood))
 	{
 		print_map(map);
-		printf("Error: Not all collectibles are reachable, or no path to exit.\n");
+		printf("Error: Not all collectibles"
+			"are reachable, or no path to exit.\n");
 		return (0);
 	}
 	return (1);
