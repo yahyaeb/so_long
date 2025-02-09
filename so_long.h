@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:51:27 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/08 09:17:47 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 12:08:51 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@
 #  define KEY_D 100       // D key
 #  define KEY_ESC 65307   // ESC key
 # endif
+typedef struct s_flood
+{
+	int	collectibles_count;
+	int	found_exit;
+}	t_flood;
+
 
 typedef struct s_textures
 {
@@ -60,6 +66,7 @@ typedef struct s_game
 	t_textures	textures;
 	int			collectibles_count;
 	int			total_collectibles;
+	int     	player_on_exit;
 }	t_game;
 
 /*---------------- Map Validator ----------------*/
@@ -84,13 +91,12 @@ int handle_keypress(int keycode, t_game *game);
 
 /*---------------- Utility Functions ------------*/
 int		count_collectibles(char **map);
+
 int		count_checker(int *player_count, int *exit_count,
 			int *collectible_count);
 int		check_exceeding_counts(int *player_count, int *exit_count);
 char	*get_next_line(int fd);
 char	**copy_map(char **map);
-int		flood_fill(char **map, int x, int y, int *collectibles_count,
-			int total_collectibles, int *found_exit);
 int		ft_strlen(const char *str);
 char **parse_map(const char *file_path);
 
@@ -100,4 +106,11 @@ char	**allocate_map(int line_count);
 int	count_lines(const char *file_path);
 void	free_map_memory(char **map, int size);
 void	read_lines(int fd, char **map);
+void	init_game(t_game *game);
+void	load_map(t_game *game);
+void	initialize_exit_pos(t_game *game);
+int	flood_fill(char **map, int x, int y, t_flood *flood);
+int	is_valid_move_table(char **map, int x, int y);
+int	is_valid_move(t_game *game, int new_x, int new_y);
+void print_map(char **map);
 #endif

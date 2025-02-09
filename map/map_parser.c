@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 09:25:16 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/08 09:18:47 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/08 09:37:03 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,31 @@ char	**parse_map(const char *file_path)
 	read_lines(fd, map);
 	close(fd);
 	return (map);
+}
+
+char	**copy_map(char **map)
+{
+	int		height;
+	int		i;
+	char	**map_copy;
+
+	height = get_map_height(map);
+	map_copy = malloc((height + 1) * sizeof(char *));
+	if (!map_copy)
+		return (NULL);
+	i = 0;
+	while (i < height)
+	{
+		map_copy[i] = ft_strdup(map[i]);
+		if (!map_copy[i])
+		{
+			while (i > 0)
+				free(map_copy[--i]);
+			free(map_copy);
+			return (NULL);
+		}
+		i++;
+	}
+	map_copy[height] = NULL;
+	return (map_copy);
 }

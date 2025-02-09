@@ -6,45 +6,78 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:54:31 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/08 09:28:17 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:11:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int	has_required_elements(char **map)
+int	count_elements(char **map, int *player_count,
+	int *exit_count, int *collectible_count)
 {
 	int	i;
 	int	j;
-	int	player_count;
-	int	exit_count;
-	int	collectible_count;
 
 	i = 0;
-	j = 0;
-	player_count = 0;
-	exit_count = 0;
-	collectible_count = 0;
-	if (!map)
-		return (0);
 	while (map[i])
 	{
 		j = 0;
 		while (j < ft_strlen(map[i]))
 		{
 			if (map[i][j] == 'P')
-				player_count++;
+				(*player_count)++;
 			else if (map[i][j] == 'E')
-				exit_count++;
+				(*exit_count)++;
 			else if (map[i][j] == 'C')
-				collectible_count++;
-			if (check_exceeding_counts(&player_count, &exit_count) == 0)
+				(*collectible_count)++;
+			if (check_exceeding_counts(player_count, exit_count) == 0)
 				return (0);
 			j++;
 		}
 		i++;
 	}
-	if (count_checker(&player_count, &exit_count, &collectible_count) == 0)
+	return (1);
+}
+int	has_invalid_char(char **map)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] != 'P' && map[i][j] != 'E' &&
+				map[i][j] != 'C' && map[i][j] != '0' && map[i][j] != '1' && map[i][j] != '\n')
+			{
+				printf("Error: Invalid character '%c' found in map.\n", map[i][j]);
+				return (1); // Found an invalid character
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0); // No invalid characters found
+}
+
+int	has_required_elements(char **map)
+{
+	int	player_count;
+	int	exit_count;
+	int	collectible_count;
+
+	player_count = 0;
+	exit_count = 0;
+	collectible_count = 0;
+	if (!map)
+		return (0);
+	if (count_elements(map, &player_count,
+			&exit_count, &collectible_count) == 0)
+		return (0);
+	if (count_checker(&player_count,
+			&exit_count, &collectible_count) == 0)
 		return (0);
 	return (1);
 }
@@ -64,45 +97,8 @@ int	check_exceeding_counts(int *player_count, int *exit_count)
 	return (1);
 }
 
-char	**copy_map(char **map)
+int	validate_map_structure(char **map)
 {
-	int		height;
-	int		i;
-	char	**map_copy;
-
-	height = get_map_height(map);
-	map_copy = malloc((height + 1) * sizeof(char *));
-	if (!map_copy)
-		return (NULL);
-	i = 0;
-	while (i < height)
-	{
-		map_copy[i] = ft_strdup(map[i]);
-		if (!map_copy[i])
-		{
-			while (i > 0)
-				free(map_copy[--i]);
-			free(map_copy);
-			return (NULL);
-		}
-		i++;
-	}
-	map_copy[height] = NULL;
-	return (map_copy);
-}
-
-int 	validate_map(char **map)
-{
-	int	px;
-	int	py;
-	int	collectibles_count;
-	int	found_exit;
-	int	total_collectibles;
-
-	total_collectibles = count_collectibles(map);
-	found_exit = 0;
-	collectibles_count = 0;
-	get_player_position(map, &px, &py);
 	if (!map)
 	{
 		perror("Error: Map is null.\n");
@@ -110,6 +106,11 @@ int 	validate_map(char **map)
 	}
 	if (!is_rectangular(map))
 		return (0);
+	if (has_invalid_char(map))
+	{
+		printf("invalid chars\n");	
+		return (0);	
+	}
 	if (!has_surrounding_walls(map))
 	{
 		perror("Error: Map is not properly enclosed by walls.\n");
@@ -120,10 +121,27 @@ int 	validate_map(char **map)
 		printf("Error: Missing required elements.\n");
 		return (0);
 	}
-	if (!flood_fill(map, px, py, &collectibles_count, total_collectibles, &found_exit))
+	return (1);
+}
+
+int	validate_map(char **map)
+{
+	int	px;
+	int	py;
+	t_flood flood;
+
+	flood.collectibles_count = 0;
+	flood.found_exit = 0;
+	get_player_position(map, &px, &py);
+
+	if (!validate_map_structure(map))
+		return (0);
+	if (!flood_fill(map, px, py, &flood))
 	{
+		print_map(map);
 		printf("Error: Not all collectibles are reachable, or no path to exit.\n");
 		return (0);
 	}
 	return (1);
 }
+

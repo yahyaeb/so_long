@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 09:20:21 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/08 09:21:32 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 12:13:18 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,57 @@ int	count_checker(int *player_count, int *exit_count, int *collectible_count)
 	}
 	return (1);
 }
-
-int	flood_fill(char **map, int x, int y, int *collectibles_count, int total_collectibles, int *found_exit)
+int	is_valid_move_table(char **map, int x, int y)
 {
 	if (x < 0 || y < 0 || !map[y] || !map[y][x])
 		return (0);
 	if (map[y][x] == '1' || map[y][x] == 'V')
 		return (0);
-	if (map[y][x] == 'E')
-	{
-		*found_exit = 1;
-		return (0);
-	}
+	return (1);
+}
+
+void	update_state(char **map, int x, int y, t_flood *flood)
+{
 	if (map[y][x] == 'C')
-		(*collectibles_count)++;
-	map[y][x] = 'V';
-	flood_fill(map, x + 1, y, collectibles_count,
-		total_collectibles, found_exit);
-	flood_fill(map, x - 1, y, collectibles_count,
-		total_collectibles, found_exit);
-	flood_fill(map, x, y + 1, collectibles_count,
-		total_collectibles, found_exit);
-	flood_fill(map, x, y - 1, collectibles_count,
-		total_collectibles, found_exit);
-	return (*collectibles_count == total_collectibles && *found_exit);
+		flood->collectibles_count++;
+	if (map[y][x] == 'E')
+		flood->found_exit = 1;
+	map[y][x] = 'V'; // Mark as visited
+}
+
+void	explore_neighbors(char **map, int x, int y, t_flood *flood)
+{
+	flood_fill(map, x + 1, y, flood);
+	flood_fill(map, x - 1, y, flood);
+	flood_fill(map, x, y + 1, flood);
+	flood_fill(map, x, y - 1, flood);
+}
+
+void print_map(char **map)
+{
+	int i;
+
+	i = 0;
+	while(map[i])
+	{
+		int j = 0;
+		while(map[i][j])
+		{
+			printf("%c", map[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
+int	flood_fill(char **map, int x, int y, t_flood *flood)
+{
+	int total_collectibles;
+	
+	total_collectibles = count_collectibles(map);
+	if (!is_valid_move_table(map, x, y))
+		return (0);
+	update_state(map, x, y, flood);
+	explore_neighbors(map, x, y, flood);
+	return (flood->collectibles_count == total_collectibles && flood->found_exit);
 }

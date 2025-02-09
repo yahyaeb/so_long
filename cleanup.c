@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 11:18:39 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/07 11:26:24 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:06:44 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ void	free_map(char **map)
 {
 	int	i;
 
+	if (!map)
+		return;
 	i = 0;
-	while (map && map[i])
+	while (map[i])
 	{
 		free(map[i]);
 		i++;
@@ -52,26 +54,19 @@ void	destroy_param(t_game *game)
 
 void	cleanup_game(t_game *game)
 {
-	int	i;
+	if (!game)
+		return;
 
-	i = 0;
-	if (game->map_copy)
-	{
-		while (game->map_copy[i])
-			free(game->map_copy[i++]);
-		free(game->map_copy);
-	}
-	i = 0;
-	if (game->map)
-	{
-		while (game->map[i])
-			free(game->map[i++]);
-		free(game->map);
-	}
+	// ✅ Use free_map() instead of manually freeing maps
+	free_map(game->map_copy);
+	free_map(game->map);
+
 	destroy_param(game);
+
 	if (game->mlx)
 	{
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
 	}
 }
+
