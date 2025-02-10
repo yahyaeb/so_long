@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:54:31 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 17:02:43 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:02:47 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ int	has_invalid_char(char **map)
 				map[i][j] != 'C' && map[i][j] != '0' &&
 				map[i][j] != '1' && map[i][j] != '\n')
 			{
-				printf("Error: Invalid character '%c'"
-					"found in map.\n", map[i][j]);
+				ft_printf("Error: Map is not properly enclosed by walls.");
 				return (1);
 			}
 			j++;
@@ -89,60 +88,12 @@ int	check_exceeding_counts(int *player_count, int *exit_count)
 {
 	if (*player_count > 1)
 	{
-		printf("Error: There must be exactly 1 player (P).\n");
+		ft_printf("Error: There must be exactly 1 player (P).\n");
 		return (0);
 	}
 	if (*exit_count > 1)
 	{
-		printf("Error: There must be exactly 1 exit (E).\n");
-		return (0);
-	}
-	return (1);
-}
-
-int	validate_map_structure(char **map)
-{
-	if (!map)
-	{
-		perror("Error: Map is null.\n");
-		return (0);
-	}
-	if (!is_rectangular(map))
-		return (0);
-	if (has_invalid_char(map))
-	{
-		printf("invalid chars\n");
-		return (0);
-	}
-	if (!has_surrounding_walls(map))
-	{
-		printf("Error: Map is not properly enclosed by walls.\n");
-		return (0);
-	}
-	if (!has_required_elements(map))
-	{
-		printf("Error: Missing required elements.\n");
-		return (0);
-	}
-	return (1);
-}
-
-int	validate_map(char **map)
-{
-	int			px;
-	int			py;
-	t_flood		flood;
-
-	flood.collectibles_count = 0;
-	flood.found_exit = 0;
-	get_player_position(map, &px, &py);
-	if (!validate_map_structure(map))
-		return (0);
-	if (!flood_fill(map, px, py, &flood))
-	{
-		print_map(map);
-		printf("Error: Not all collectibles"
-			"are reachable, or no path to exit.\n");
+		ft_printf("Error: There must be exactly 1 exit (E).\n");
 		return (0);
 	}
 	return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_floodfill.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 09:20:21 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 16:59:26 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/10 11:17:32 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,6 @@ void	explore_neighbors(char **map, int x, int y, t_flood *flood)
 	flood_fill(map, x - 1, y, flood);
 	flood_fill(map, x, y + 1, flood);
 	flood_fill(map, x, y - 1, flood);
-}
-
-void	print_map(char **map)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			printf("%c", map[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
 }
 
 int	flood_fill(char **map, int x, int y, t_flood *flood)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:48:49 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 13:40:16 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:52:30 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ void	load_assets(t_game *game)
 	int	img_height;
 
 	game->textures.wall = mlx_xpm_file_to_image(game->mlx,
-			"./assets/cone_background.xpm", &img_width, &img_height);
+			"./textures/cone_background.xpm", &img_width, &img_height);
 	game->textures.collectible = mlx_xpm_file_to_image(game->mlx,
-			"./assets/star_bg.xpm", &img_width, &img_height);
+			"./textures/star_bg.xpm", &img_width, &img_height);
 	game->textures.player = mlx_xpm_file_to_image(game->mlx,
-			"./assets/power_ranger_w_bg.xpm", &img_width, &img_height);
+			"./textures/power_ranger_w_bg.xpm", &img_width, &img_height);
 	game->textures.exit = mlx_xpm_file_to_image(game->mlx,
-			"./assets/door_bg.xpm", &img_width, &img_height);
+			"./textures/door_bg.xpm", &img_width, &img_height);
 	game->textures.floor = mlx_xpm_file_to_image(game->mlx,
-			"./assets/background_green_tile.xpm", &img_width, &img_height);
+			"./textures/background_green_tile.xpm", &img_width, &img_height);
 	if (!game->textures.player || !game->textures.wall || !game->textures.exit
 		|| !game->textures.collectible || !game->textures.floor)
 	{
@@ -57,31 +57,6 @@ int	count_collectibles(char **map)
 	return (collectibles_count);
 }
 
-void	initialize_exit_pos(t_game *game)
-{
-	int	i;
-	int	k;
-
-	game->exit_x = -1;
-	game->exit_y = -1;
-	i = 0;
-	while (game->map[i])
-	{
-		k = 0;
-		while (game->map[i][k])
-		{
-			if (game->map[i][k] == 'E')
-			{
-				game->exit_x = k;
-				game->exit_y = i;
-				return ;
-			}
-			k++;
-		}
-		i++;
-	}
-}
-
 void	init_game(t_game *game)
 {
 	game->mlx = mlx_init();
@@ -94,43 +69,27 @@ void	init_game(t_game *game)
 
 void	free_map_load(char **map)
 {
-	int i;
+	int	i;
 
 	if (!map)
-		return;
-	
+		return ;
 	i = 0;
 	while (map[i])
 	{
-		free(map[i]); // ✅ Free each row (string)
+		free(map[i]);
 		i++;
 	}
-	free(map); // ✅ Free the main array
+	free(map);
 }
-void handle_map_error(t_game *game)
-{
-    if(game->map)
-		free_map(game->map);
-	if(game->map_copy)
-    	free_map(game->map_copy);
-    mlx_destroy_display(game->mlx);
-    free(game->mlx);
-    exit(1);
-}
+
 void	load_map(t_game *game)
 {
-	game->map = parse_map("map/map.ber");
+	game->map = parse_map("./map.ber");
 	if (!game->map)
-	{
 		handle_map_error(game);
-	}
 	game->map_copy = copy_map(game->map);
 	if (!game->map_copy)
-	{
 		handle_map_error(game);
-	}
 	if (!validate_map(game->map_copy))
-	{
 		handle_map_error(game);
-	}
 }

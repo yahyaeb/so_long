@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
+#    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 15:13:25 by yel-bouk          #+#    #+#              #
-#    Updated: 2025/02/08 11:51:00 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/02/10 12:41:32 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,12 +19,12 @@ SRCS = main.c \
 		main_utils.c \
 		cleanup.c \
 		keys_utils.c \
-		map/map_handler.c \
-		map/map_parser_utils.c \
-		map/map_floodfill.c \
-		map/map_utils.c \
-		map/map_parser.c \
-		src/map/parse_map.c \
+		maps/map_handler.c \
+		maps/map_parser_utils.c \
+		maps/map_floodfill.c \
+		maps/map_utils.c \
+		maps/map_validator.c \
+		maps/map_parser.c \
        	GNL/get_next_line.c \
       	GNL/get_next_line_utils.c
 OBJS = $(SRCS:.c=.o)
@@ -33,6 +33,10 @@ MLX_DIR = ./mlx
 MLX_LIB = $(MLX_DIR)/libmlx.a
 
 NCLUDES = -I./includes -I./GNL
+
+
+LIBFTPRINTF_DIR = ./ft_printf
+LIBFTPRINTF = $(LIBFTPRINTF_DIR)/libftprintf.a
 
 # Detect OS
 UNAME := $(shell uname)
@@ -46,7 +50,7 @@ else ifeq ($(UNAME), Darwin)
 endif
 
 # Default target
-all: $(MLX_LIB) $(NAME)
+all: $(MLX_LIB) $(LIBFTPRINTF) $(NAME)
 
 # Compile .c to .o
 .c.o:
@@ -54,7 +58,7 @@ all: $(MLX_LIB) $(NAME)
 
 # Link executable
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(MLX_FLAGS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFTPRINTF) $(MLX_FLAGS)
 
 # Build MiniLibX
 $(MLX_LIB):

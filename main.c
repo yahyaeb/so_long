@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:42:53 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 13:26:03 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:58:31 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	initialize_game(t_game *game)
 {
 	game->total_collectibles = count_collectibles(game->map);
 	game->collectibles_count = game->total_collectibles;
+	game->movement_count = 0;
 	load_assets(game);
 	initialize_player_pos(game);
 	initialize_exit_pos(game);

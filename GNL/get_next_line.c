@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 16:27:43 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/07 07:02:05 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:37:35 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,12 @@ char	*final_line(char **buffer)
 	return (line);
 }
 
-// Main function to get the next line
-char	*get_next_line(int fd)
+char	*read_until_newline(int fd, char *buffer)
 {
-	static char	*buffer;
-	char		*temp;
-	char		*newline_pos;
-	int			bytes_read;
+	char	*temp;
+	char	*newline_pos;
+	int		bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (!buffer)
-		buffer = ft_strdup("");
 	temp = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!temp)
 		return (NULL);
@@ -104,9 +98,26 @@ char	*get_next_line(int fd)
 		temp[bytes_read] = '\0';
 		buffer = strjoin_and_free(buffer, temp);
 		if (!buffer)
+		{
+			free(temp);
 			return (NULL);
+		}
 		newline_pos = ft_strchr(buffer, '\n');
 	}
 	free(temp);
+	return (buffer);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*buffer;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (!buffer)
+		buffer = ft_strdup("");
+	buffer = read_until_newline(fd, buffer);
+	if (!buffer)
+		return (NULL);
 	return (final_line(&buffer));
 }

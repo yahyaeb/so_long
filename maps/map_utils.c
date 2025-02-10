@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:54:48 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 16:56:00 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:02:23 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,23 @@ int	get_map_height(char **map)
 int	is_rectangular(char **map)
 {
 	int	row_length;
-	int	map_height;
 	int	i;
 	int	len;
 
 	if (!map || !map[0])
-		return (printf("Error: Map is empty.\n"), 0);
-	i = 0;
-	map_height = get_map_height(map);
+		return (ft_printf("Error: Map is empty.\n"), 0);
 	row_length = ft_strlen(map[0]);
 	if (map[0][row_length - 1] == '\n')
 		row_length--;
+	i = 0;
 	while (map[i])
 	{
 		len = ft_strlen(map[i]);
 		if (map[i][len - 1] == '\n')
 			len--;
-		if (map_height == row_length)
+		if (len != row_length)
 		{
-			printf("Error: Map is not rectangular\n");
+			ft_printf("Error: Map is not rectangular\n");
 			return (0);
 		}
 		i++;
@@ -89,7 +87,7 @@ int	has_surrounding_walls(char **map)
 	int	i;
 
 	if (!map || !map[0])
-		return (printf("Error: Map is empty.\n"), 0);
+		return (ft_printf("Error: Map is empty.\n"), 0);
 	height = get_map_height(map);
 	if (!check_top_bottom_walls(map[0])
 		|| !check_top_bottom_walls(map[height - 1]))
@@ -102,27 +100,4 @@ int	has_surrounding_walls(char **map)
 		i++;
 	}
 	return (1);
-}
-
-void	get_player_position(char **map, int *x, int *y)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (map[i][j] == 'P')
-			{
-				*x = j;
-				*y = i;
-				return ;
-			}
-			j++;
-		}
-		i++;
-	}
 }

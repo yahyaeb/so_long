@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   keys.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 11:15:50 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/09 12:12:34 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:24:45 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-// void	get_new_position(int keycode, int *new_x, int *new_y)
-// {
-// 	if (keycode == KEY_W)
-// 		(*new_y) -= 1;
-// 	else if (keycode == KEY_S)
-// 		(*new_y) += 1;
-// 	else if (keycode == KEY_A)
-// 		(*new_x) -= 1;
-// 	else if (keycode == KEY_D)
-// 		(*new_x) += 1;
-// }
 
 int	is_valid_move(t_game *game, int new_x, int new_y)
 {
@@ -39,7 +27,6 @@ void	collect_item(t_game *game, int new_x, int new_y)
 	{
 		game->map[new_y][new_x] = '0';
 		game->collectibles_count--;
-		printf("Collectible picked! Remaining: %d\n", game->collectibles_count);
 	}
 }
 
@@ -49,37 +36,25 @@ void	handle_exit(t_game *game, int new_x, int new_y)
 	{
 		if (game->collectibles_count == 0)
 		{
-			
-			printf("You win! Exiting...\n");
+			ft_printf("You win! Exiting...\n");
 			cleanup_game(game);
 			exit(0);
 		}
-		else
-			printf("Collect all collectibles before exiting!\n");
 	}
 }
 
 void	update_player_position(t_game *game, int new_x, int new_y)
 {
-    // ✅ Restore 'E' if the player was previously standing on it
-    if (game->player_on_exit)
-        game->map[game->player_y][game->player_x] = 'E';
-    else
-        game->map[game->player_y][game->player_x] = '0';
-
-    // ✅ Update player position
-    game->player_x = new_x;
-    game->player_y = new_y;
-
-    // ✅ Check if the player moves onto 'E'
-    if (game->map[new_y][new_x] == 'E')
-        game->player_on_exit = 1;
-    else
-        game->player_on_exit = 0;
-
-    game->map[new_y][new_x] = 'P';
+	if (game->player_x == game->exit_x && game->player_y == game->exit_y)
+		game->map[game->player_y][game->player_x] = 'E';
+	else
+		game->map[game->player_y][game->player_x] = '0';
+	game->player_x = new_x;
+	game->player_y = new_y;
+	game->player_on_exit = (game->player_x == game->exit_x
+			&& game->player_y == game->exit_y);
+	game->map[new_y][new_x] = 'P';
 }
-
 
 int	handle_keypress(int keycode, t_game *game)
 {
@@ -96,11 +71,12 @@ int	handle_keypress(int keycode, t_game *game)
 	}
 	if (!is_valid_move(game, new_x, new_y))
 		return (0);
+	if (new_x != game->player_x || new_y != game->player_y)
+		ft_printf("Movements counter: %d\n", ++game->movement_count);
 	collect_item(game, new_x, new_y);
 	handle_exit(game, new_x, new_y);
 	update_player_position(game, new_x, new_y);
 	mlx_clear_window(game->mlx, game->win);
 	render_map(game, TILE_SIZE);
-
 	return (0);
 }

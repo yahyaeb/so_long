@@ -1,25 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   handlers_chars.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 13:17:13 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/10 11:36:49 by yel-bouk         ###   ########.fr       */
+/*   Created: 2024/11/23 19:46:19 by yel-bouk          #+#    #+#             */
+/*   Updated: 2025/02/10 12:06:01 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-//Calculates the length of a string (excluding null terminator)
-int	ft_strlen(const char *str)
-{
-	int	i;
+#include "../includes/ft_printf.h"
 
-	i = 0;
-	while (str[i])
+int	handle_strings(char *str)
+{
+	if (!str)
+		str = "(null)";
+	ft_putstr(str);
+	return (ft_strlen_printf(str));
+}
+
+int	handle_char(char c)
+{
+	ft_putchar(c);
+	return (1);
+}
+
+int	handle_pointers(void *ptr)
+{
+	if (!ptr)
 	{
-		i++;
+		write(1, "0x0", 3);
+		return (3);
 	}
-	return (i);
+	write(1, "0x", 2);
+	return (2 + ft_print_pointer((uintptr_t)ptr));
 }
