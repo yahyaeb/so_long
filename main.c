@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:42:53 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 12:03:59 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:58:56 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,28 @@ void	setup_hooks(t_game *game)
 	mlx_hook(game->win, 2, 1L << 0, handle_keypress, game);
 }
 
-int	main(void)
+int	main(int argc, char *argv[])
 {
 	t_game	game;
 
+	if (argc != 2)
+	{
+		ft_printf("Usage: %s <map_file.ber>\n", argv[0]);
+		return (1);
+	}
 	init_game(&game);
-	load_map(&game);
+
+	game.map = parse_map(argv[1]);
+	if (!game.map)
+		handle_map_error(&game);
+
+	game.map_copy = copy_map(game.map);
+	if (!game.map_copy)
+		handle_map_error(&game);
+	if (!validate_map(game.map_copy))
+		handle_map_error(&game);
+
+		
 	create_window(&game);
 	initialize_game(&game);
 	setup_hooks(&game);
