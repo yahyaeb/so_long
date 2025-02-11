@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:51:27 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/10 13:16:29 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:34:56 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #  include "mlx/mlx.h"
 # endif
 
-# define TILE_SIZE 128
+# define TILE_SIZE 125
 
 # if defined(__linux__)
 #  define KEY_W 119       // W key

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 11:37:18 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/10 13:16:26 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:45:39 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ void	initialize_exit_pos(t_game *game)
 	int	i;
 	int	k;
 
-	game->exit_x = -1;
-	game->exit_y = -1;
 	i = 0;
 	while (game->map[i])
 	{

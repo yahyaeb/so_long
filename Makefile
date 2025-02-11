@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 15:13:25 by yel-bouk          #+#    #+#              #
-#    Updated: 2025/02/10 12:41:32 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/02/11 12:53:57 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,12 +31,10 @@ OBJS = $(SRCS:.c=.o)
 
 MLX_DIR = ./mlx
 MLX_LIB = $(MLX_DIR)/libmlx.a
-
-NCLUDES = -I./includes -I./GNL
-
-
+MLX_REPO = https://github.com/42Paris/minilibx-linux.git
 LIBFTPRINTF_DIR = ./ft_printf
 LIBFTPRINTF = $(LIBFTPRINTF_DIR)/libftprintf.a
+
 
 # Detect OS
 UNAME := $(shell uname)
@@ -46,7 +44,6 @@ ifeq ($(UNAME), Linux)
 else ifeq ($(UNAME), Darwin)
 	INCLUDES = -I/opt/X11/include -Imlx
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/X11/lib -lXext -lX11 -framework OpenGL -framework AppKit
-
 endif
 
 # Default target
@@ -60,6 +57,12 @@ all: $(MLX_LIB) $(LIBFTPRINTF) $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFTPRINTF) $(MLX_FLAGS)
 
+$(MLX_DIR):
+	git clone $(MLX_REPO) $(MLX_DIR)
+
+$(MLX_LIB): $(MLX_DIR)
+	@make -C $(MLX_DIR)
+
 # Build MiniLibX
 $(MLX_LIB):
 	@make -C $(MLX_DIR)
@@ -71,6 +74,8 @@ clean:
 # Full clean
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) -r $(MLX_DIR)
+
 
 # Rebuild everything
 re: fclean all

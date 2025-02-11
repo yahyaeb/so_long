@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:18:23 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/10 13:58:14 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:57:40 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,11 @@ int	validate_map_structure(char **map)
 		return (0);
 	if (!has_surrounding_walls(map))
 	{
-		ft_printf("Error: Map is not properly enclosed by walls.\n");
+		ft_printf("Error: Map is not properly enclosed by walls.(1)\n");
 		return (0);
 	}
 	if (!has_required_elements(map))
-	{
-		ft_printf("Error: Missing required elements.\n");
 		return (0);
-	}
 	return (1);
 }
 

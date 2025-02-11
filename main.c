@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:42:53 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/10 12:58:31 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:03:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	create_window(t_game *game)
 	int	window_width;
 	int	window_height;
 
-	window_width = (strlen(game->map[0]) - 1) * TILE_SIZE;
+	window_width = (ft_strlen(game->map[0]) - 1) * TILE_SIZE;
 	window_height = get_map_height(game->map) * TILE_SIZE;
 	game->win = mlx_new_window(game->mlx, window_width,
 			window_height, "So Long");
