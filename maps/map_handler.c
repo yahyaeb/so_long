@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:54:31 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 10:52:07 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:45:13 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	has_invalid_char(char **map)
 				map[i][j] != 'C' && map[i][j] != '0' &&
 				map[i][j] != '1' && map[i][j] != '\n')
 			{
-				ft_printf("Error: Map is not properly enclosed by walls.");
+				ft_printf("Error: Invalid character.\n");
 				return (1);
 			}
 			j++;

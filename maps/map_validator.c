@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:18:23 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 10:57:40 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:15:18 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,24 @@ void	get_player_position(char **map, int *x, int *y)
 	}
 }
 
-void	handle_map_error(t_game *game)
+void handle_map_error(t_game *game)
 {
-	if (game->map)
-		free_map(game->map);
-	if (game->map_copy)
-		free_map(game->map_copy);
-	mlx_destroy_display(game->mlx);
-	free(game->mlx);
-	exit(1);
+    if (game->map)
+    {
+        free_map(game->map);
+        game->map = NULL;
+    }
+    if (game->map_copy)
+    {
+        free_map(game->map_copy);
+        game->map_copy = NULL;
+    }
+    if (game->mlx)
+    {
+        mlx_destroy_display(game->mlx);
+        free(game->mlx);
+        game->mlx = NULL;
+    }
+    exit(1);
 }
+
