@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 09:16:14 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 17:18:36 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:42:01 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	count_lines(const char *file_path)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (line[0] != '\n' && line[0] != '\0')
+		if (line[0] != '\0')
 			count++;
 		free(line);
 		line = get_next_line(fd);
@@ -70,16 +70,11 @@ void	read_lines(int fd, char **map)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (line[0] == '\n' || line[0] == '\0') // ❌ Empty line detected
-		{
-			free(line);// ✅ Free only already allocated lines
-			perror("Error: Map contains an empty line.");
-			exit(1);
-		}
-		map[i++] = line;
+		if (line[0] != '\0')
+			map[i++] = line;
+		else
+			free(line);
 		line = get_next_line(fd);
 	}
 	map[i] = NULL;
 }
-
-

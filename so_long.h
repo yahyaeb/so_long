@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:51:27 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 17:18:55 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:37:34 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +130,7 @@ int		handle_keypress(int keycode, t_game *game);
 int		close_window_x(void *mlx_ptr);
 int		close_window_esc(int keycode, void *param);
 void	cleanup_game(t_game *game);
+void	handle_map(t_game *game);
+void	handle_map_copy(t_game *game);
 
 #endif

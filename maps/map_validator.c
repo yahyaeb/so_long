@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:18:23 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 17:15:18 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:38:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	validate_map(char **map)
 	if (!flood_fill(map, px, py, &flood))
 	{
 		ft_printf("Error: Not all collectibles"
-			"are reachable, or no path to exit.\n");
+			" are reachable, or no path to exit.\n");
 		return (0);
 	}
 	return (1);
@@ -76,24 +76,23 @@ void	get_player_position(char **map, int *x, int *y)
 	}
 }
 
-void handle_map_error(t_game *game)
+void	handle_map_error(t_game *game)
 {
-    if (game->map)
-    {
-        free_map(game->map);
-        game->map = NULL;
-    }
-    if (game->map_copy)
-    {
-        free_map(game->map_copy);
-        game->map_copy = NULL;
-    }
-    if (game->mlx)
-    {
-        mlx_destroy_display(game->mlx);
-        free(game->mlx);
-        game->mlx = NULL;
-    }
-    exit(1);
+	if (game->map)
+	{
+		free_map(game->map);
+		game->map = NULL;
+	}
+	if (game->map_copy)
+	{
+		free_map(game->map_copy);
+		game->map_copy = NULL;
+	}
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+		game->mlx = NULL;
+	}
+	exit(1);
 }
-

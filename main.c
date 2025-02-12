@@ -6,34 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:42:53 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 17:58:56 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:49:00 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void	initialize_player_pos(t_game *game)
-{
-	int	i;
-	int	k;
-
-	i = 0;
-	while (game->map[i])
-	{
-		k = 0;
-		while (game->map[i][k])
-		{
-			if (game->map[i][k] == 'P')
-			{
-				game->player_x = k;
-				game->player_y = i;
-				return ;
-			}
-			k++;
-		}
-		i++;
-	}
-}
 
 void	create_window(t_game *game)
 {
@@ -69,31 +46,45 @@ void	setup_hooks(t_game *game)
 	mlx_hook(game->win, 2, 1L << 0, handle_keypress, game);
 }
 
+int	check_argv(char *argv)
+{
+	int	i;
+	int	len;
+
+	len = ft_strlen(argv);
+	i = 0;
+	if (len <= 4)
+		return (0);
+	if (len > 4)
+	{
+		if (argv[len - 1] != 'r' || argv[len - 2]
+			!= 'e' || argv[len - 3] != 'b' || argv[len - 4] != '.')
+			return (0);
+	}
+	return (1);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_game	game;
 
-	if (argc != 2)
+	if (argc == 2 && check_argv(argv[1]))
 	{
-		ft_printf("Usage: %s <map_file.ber>\n", argv[0]);
-		return (1);
+		init_game(&game);
+		game.map = parse_map(argv[1]);
+		if (!game.map)
+			handle_map(&game);
+		game.map_copy = copy_map(game.map);
+		if (!game.map_copy)
+			handle_map_copy(&game);
+		if (!validate_map(game.map_copy))
+			handle_map_error(&game);
+		create_window(&game);
+		initialize_game(&game);
+		setup_hooks(&game);
+		mlx_loop(game.mlx);
 	}
-	init_game(&game);
-
-	game.map = parse_map(argv[1]);
-	if (!game.map)
-		handle_map_error(&game);
-
-	game.map_copy = copy_map(game.map);
-	if (!game.map_copy)
-		handle_map_error(&game);
-	if (!validate_map(game.map_copy))
-		handle_map_error(&game);
-
-		
-	create_window(&game);
-	initialize_game(&game);
-	setup_hooks(&game);
-	mlx_loop(game.mlx);
+	else
+		ft_printf("Error: Usage %s <map_file.ber>\n", argv[0]);
 	return (0);
 }

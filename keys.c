@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 11:15:50 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/11 15:43:21 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:36:35 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	handle_exit(t_game *game, int new_x, int new_y)
 void	update_player_position(t_game *game, int new_x, int new_y)
 {
 	if (game->player_x == game->exit_x
-			&& game->player_y == game->exit_y)
+		&& game->player_y == game->exit_y)
 		game->map[game->player_y][game->player_x] = 'E';
 	else
 		game->map[game->player_y][game->player_x] = '0';
