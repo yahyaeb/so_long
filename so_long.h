@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 06:51:27 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/12 12:37:34 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:42:39 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,7 @@
 # include "./GNL/get_next_line.h"
 # include "ft_printf/includes/ft_printf.h"
 
-# if defined(__APPLE__)
-#  include "miniLibx/mlx.h"
-# else
-#  include "mlx/mlx.h"
-# endif
+# include "mlx/mlx.h"
 
 # define TILE_SIZE 125
 

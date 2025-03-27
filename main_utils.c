@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:48:49 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/12 12:40:37 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:43:32 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	load_assets(t_game *game)
 		|| !game->textures.collectible || !game->textures.floor)
 	{
 		perror("Error: Failed to load assets");
+		cleanup_game(game);
 		exit(1);
 	}
 }
