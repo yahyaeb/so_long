@@ -18,7 +18,9 @@ The game requirements include:
 
 ## Preview
 
-![Gameplay Screenshot](https://i.imgur.com/vObgI3U.gif)
+<p>
+  <img src="./textures/preview.gif" alt="Gameplay GIF" width="400"/>
+</p>
 
 ## Features
 
