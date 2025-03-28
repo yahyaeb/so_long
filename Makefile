@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
+#    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 15:13:25 by yel-bouk          #+#    #+#              #
-#    Updated: 2025/02/11 12:53:57 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/03/28 15:47:28 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
-CC = cc
+CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 
 SRCS = main.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 06:42:53 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/12 13:49:00 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/03/28 15:38:11 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,9 @@ void	setup_hooks(t_game *game)
 
 int	check_argv(char *argv)
 {
-	int	i;
 	int	len;
 
 	len = ft_strlen(argv);
-	i = 0;
 	if (len <= 4)
 		return (0);
 	if (len > 4)
